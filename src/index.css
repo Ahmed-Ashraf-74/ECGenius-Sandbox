@@ -1,0 +1,240 @@
+@import "tailwindcss";
+@theme {
+  /* ECGenius Brand Colors */
+  --color-brand-navy: #052e6e;
+  --color-brand-blue: #0284c7;
+  --color-brand-cyan: #0ea5e9;
+  --color-brand-pulse: #e11d48;
+  --color-brand-crimson: #f43f5e;
+  --color-surface-canvas: #f8fafc;
+  --color-surface-warm: #f5f5f3;
+  /* Modern Typography */
+  --font-sans:
+    "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth Masked Headline Reveal (Inspired by Celestia & Carefinity) */
+
+@keyframes revealUp {
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gentle Floating Effect for Glass Heart & Pop-out Cards */
+
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Continuous Horizontal Marquee for Feature Showcase */
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ECG Line Drawing Pulse */
+
+@keyframes ecgDraw {
+  0% {
+    stroke-dashoffset: 300;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-reveal-up {
+  animation: revealUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-reveal-delay-1 {
+  animation: revealUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+
+.animate-reveal-delay-2 {
+  animation: revealUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both;
+}
+
+.animate-float-slow {
+  animation: floatSlow 5s ease-in-out infinite;
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 32s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Standard Medical ECG Paper Grid Background */
+
+.bg-ecg-grid {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(to right, rgba(244, 63, 94, 0.14) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 63, 94, 0.14) 1px, transparent 1px),
+    linear-gradient(to right, rgba(244, 63, 94, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 63, 94, 0.06) 1px, transparent 1px);
+  background-size:
+    40px 40px,
+    40px 40px,
+    8px 8px,
+    8px 8px;
+}
+
+/* Glassmorphism Surface Utility */
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+}
+
+/* Live Continuous ECG Waveform Scroll */
+
+@keyframes ecgFlow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ecg-flow {
+  animation: ecgFlow 3.5s linear infinite;
+}
+
+/* Deep Royal Clinical Gradient Shift */
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-shift {
+  background-size: 240% 240%;
+  animation: gradientShift 4.5s ease-in-out infinite;
+}
+
+/* Realistic 3D Cardiac Breathing & Depth Float (No 2D Flat Flip) */
+
+@keyframes heart3DPulse {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+  14% {
+    transform: translateY(-4px) scale(1.035);
+  }
+  28% {
+    transform: translateY(0px) scale(1.005);
+  }
+  42% {
+    transform: translateY(-3px) scale(1.025);
+  }
+  70% {
+    transform: translateY(-8px) scale(1);
+  }
+}
+
+/* 360-Degree 3D Orbital Ring Around the Heart */
+
+@keyframes orbit3D {
+  0% {
+    transform: rotateX(72deg) rotateY(-12deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(72deg) rotateY(-12deg) rotateZ(360deg);
+  }
+}
+
+.animate-heart-3d {
+  animation: heart3DPulse 5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+
+.animate-orbit-3d {
+  animation: orbit3D 16s linear infinite;
+}
+
+/* 3D Orbital ECG Pulse Rings Around the Glass Heart */
+
+@keyframes orbitalSpinCW {
+  0% {
+    transform: rotateX(70deg) rotateY(-14deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(70deg) rotateY(-14deg) rotateZ(360deg);
+  }
+}
+
+@keyframes orbitalSpinCCW {
+  0% {
+    transform: rotateX(66deg) rotateY(16deg) rotateZ(360deg);
+  }
+  100% {
+    transform: rotateX(66deg) rotateY(16deg) rotateZ(0deg);
+  }
+}
+
+@keyframes pulseWaveExpand {
+  0% {
+    transform: scale(0.82);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1.28);
+    opacity: 0;
+  }
+}
+
+.animate-orbit-cw {
+  animation: orbitalSpinCW 14s linear infinite;
+}
+
+.animate-orbit-ccw {
+  animation: orbitalSpinCCW 19s linear infinite;
+}
+
+.animate-pulse-wave {
+  animation: pulseWaveExpand 3.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.animate-pulse-wave-delay {
+  animation: pulseWaveExpand 3.2s cubic-bezier(0.16, 1, 0.3, 1) 1.6s infinite;
+}
