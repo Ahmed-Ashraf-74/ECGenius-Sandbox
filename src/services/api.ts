@@ -1,5 +1,40 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5255/api";
+
+export const APP_NAME = import.meta.env.VITE_APP_NAME || "ECGenius";
+
+export async function apiRequest<T>(
+  endpoint: string,
+  options: RequestInit = {},
+): Promise<T> {
+  const headers = new Headers(options.headers);
+
+  if (!(options.body instanceof FormData) && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    headers,
+  });
+
+  if (!response.ok) {
+    const errorMessage = await response.text();
+
+    throw new Error(
+      errorMessage || `API Error: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  return response.json() as Promise<T>;
+}
+
 export type UserRole = "doctor" | "patient" | "support";
 
 export interface AuthSession {
@@ -30,12 +65,8 @@ export interface RegisterPayload {
 const SESSION_STORAGE_KEY = "ecgenius_session";
 const USE_MOCK_API = true;
 
-const BASE_URL =
-  (import.meta as unknown as { env?: Record<string, string> }).env
-    ?.VITE_API_BASE_URL || "https://api.ecgenius.health/v1";
-
 export const apiClient = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_BASE_URL,
   timeout: 12000,
   headers: {
     "Content-Type": "application/json",
@@ -60,7 +91,6 @@ export function clearSession(): void {
   localStorage.removeItem(SESSION_STORAGE_KEY);
 }
 
-// Attach Bearer token automatically to outgoing requests
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const session = getStoredSession();
   if (session?.token && config.headers) {
@@ -69,7 +99,6 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config;
 });
 
-// Handle 401 session expiration cleanly
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
