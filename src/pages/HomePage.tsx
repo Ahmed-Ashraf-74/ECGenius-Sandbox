@@ -4,7 +4,7 @@ import {
   Activity,
   BrainCircuit,
   Stethoscope,
-  Wrench,
+  ShieldAlert,
   ArrowRight,
   CalendarCheck,
   ShieldCheck,
@@ -265,7 +265,7 @@ export default function HomePage() {
                     Access Portal
                   </Button>
                 </a>
-                <a href="#workflow">
+                <a href="#Workflow">
                   <Button
                     variant="outline"
                     size="lg"
@@ -830,22 +830,22 @@ export default function HomePage() {
             <div className="rounded-3xl bg-[#eef4fb] p-7 border border-slate-200/80 hover:border-slate-500 hover:shadow-lg transition-all flex flex-col justify-between">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-slate-800 text-white flex items-center justify-center mb-5">
-                  <Wrench className="w-6 h-6" />
+                  <ShieldAlert className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold text-[#052e6e]">
-                  Support Login
+                  Admin Login
                 </h3>
                 <p className="mt-2 text-sm font-normal text-slate-600 leading-relaxed">
-                  Monitor connected ECG hardware telemetry, review audit logs,
-                  and approve healthcare accounts.
+                  Manage user accounts, doctor activations, RBAC permissions,
+                  immutable audit logs, and system health.
                 </p>
               </div>
               <div className="mt-7 pt-4 border-t border-slate-200/80 flex items-center justify-between">
                 <Link
-                  to="/login?role=support"
+                  to="/login?role=admin"
                   className="text-sm font-bold text-slate-800 hover:text-[#052e6e] inline-flex items-center gap-1.5"
                 >
-                  Support Console <ArrowRight className="w-4 h-4" />
+                  Admin Console <ArrowRight className="w-4 h-4" />
                 </Link>
                 <span className="text-[11px] font-semibold text-slate-400">
                   RBAC Protected

@@ -292,7 +292,7 @@ export default function RegisterPage() {
                         placeholder={
                           role === "doctor"
                             ? "Dr. Ahmed Ashraf"
-                            : "Sara Mahmoud"
+                            : "Samir Mahmoud"
                         }
                         className="w-full px-3.5 py-2.5 rounded-xl bg-slate-100/80 border border-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-[#0284c7] transition-all"
                       />
@@ -323,7 +323,7 @@ export default function RegisterPage() {
                       placeholder={
                         role === "doctor"
                           ? "dr.ahmed@hospital.org"
-                          : "sara@patient.health"
+                          : "samir@patient.health"
                       }
                       className="w-full px-3.5 py-2.5 rounded-xl bg-slate-100/80 border border-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-[#0284c7] transition-all"
                     />

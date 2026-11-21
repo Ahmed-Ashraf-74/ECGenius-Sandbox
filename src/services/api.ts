@@ -35,7 +35,7 @@ export async function apiRequest<T>(
   return response.json() as Promise<T>;
 }
 
-export type UserRole = "doctor" | "patient" | "support";
+export type UserRole = "patient" | "doctor" | "admin";
 
 export interface AuthSession {
   role: UserRole;
@@ -117,7 +117,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const authService = {
   async login(payload: LoginPayload): Promise<{
     requires2FA: boolean;
-    accountStatus: "active" | "pending";
+    accountStatus: "active" | "pending" | "deactivated";
     session?: AuthSession;
   }> {
     if (!USE_MOCK_API) {
@@ -127,6 +127,10 @@ export const authService = {
 
     await delay(450);
 
+    if (payload.email.toLowerCase().includes("deactivated")) {
+      return { requires2FA: false, accountStatus: "deactivated" };
+    }
+
     if (
       payload.role === "doctor" &&
       payload.email.toLowerCase().includes("pending")
@@ -134,7 +138,7 @@ export const authService = {
       return { requires2FA: false, accountStatus: "pending" };
     }
 
-    const requires2FA = payload.role === "doctor" || payload.role === "support";
+    const requires2FA = payload.role === "doctor" || payload.role === "admin";
     const session: AuthSession = {
       role: payload.role,
       email: payload.email.trim(),

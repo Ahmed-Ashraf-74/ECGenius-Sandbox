@@ -9,7 +9,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Stethoscope,
   Activity,
-  Wrench,
+  ShieldAlert,
   Eye,
   EyeOff,
   ArrowLeft,
@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import Button from "../../components/common/Button";
 
-type UserRole = "doctor" | "patient" | "support";
+type UserRole = "patient" | "doctor" | "admin";
 type AuthView = "signin" | "2fa" | "forgot" | "pending";
 
 interface StepCard {
@@ -45,6 +45,23 @@ interface RoleTheme {
 }
 
 const roleThemes: Record<UserRole, RoleTheme> = {
+  patient: {
+    id: "patient",
+    label: "Patient",
+    pillText: "Patient Companion Portal",
+    headline: "Understand your Heart Health",
+    subtext:
+      "Access doctor-approved ECG summaries, AI explanations, and daily heart care habits.",
+    demoEmail: "Samir.mahmoud@patient.health",
+    redirectPath: "/patient",
+    requires2FA: false,
+    icon: Activity,
+    steps: [
+      { num: "1", title: "Read plain-language ECG results" },
+      { num: "2", title: "Ask your medical AI companion" },
+      { num: "3", title: "Track daily heart wellness habits" },
+    ],
+  },
   doctor: {
     id: "doctor",
     label: "Doctor",
@@ -62,38 +79,21 @@ const roleThemes: Record<UserRole, RoleTheme> = {
       { num: "3", title: "Verify & sign clinical reports" },
     ],
   },
-  patient: {
-    id: "patient",
-    label: "Patient",
-    pillText: "Patient Companion Portal",
-    headline: "Understand your Heart Health",
+  admin: {
+    id: "admin",
+    label: "Admin",
+    pillText: "Platform Governance & Admin Console",
+    headline: "Govern Users & System Health",
     subtext:
-      "Access doctor-approved ECG summaries, AI explanations, and daily heart care habits.",
-    demoEmail: "sara.mahmoud@patient.health",
-    redirectPath: "/patient",
-    requires2FA: false,
-    icon: Activity,
-    steps: [
-      { num: "1", title: "Read plain-language ECG results" },
-      { num: "2", title: "Ask your medical AI companion" },
-      { num: "3", title: "Track daily heart wellness habits" },
-    ],
-  },
-  support: {
-    id: "support",
-    label: "Support",
-    pillText: "Technical Operations Console",
-    headline: "Monitor Clinical Telemetry",
-    subtext:
-      "Manage connected 12-lead ECG hardware, clinician approvals, and system audit logs.",
-    demoEmail: "ops.admin@ecgenius.health",
-    redirectPath: "/support",
+      "Manage user accounts, RBAC permissions, immutable audit logs, and core platform services.",
+    demoEmail: "admin@ecgenius.health",
+    redirectPath: "/admin",
     requires2FA: true,
-    icon: Wrench,
+    icon: ShieldAlert,
     steps: [
-      { num: "1", title: "Monitor 500Hz ECG device fleet" },
-      { num: "2", title: "Approve clinician access requests" },
-      { num: "3", title: "Inspect clinical audit trail logs" },
+      { num: "1", title: "Manage users & doctor activations" },
+      { num: "2", title: "Configure RBAC roles & permissions" },
+      { num: "3", title: "Monitor system health & audit logs" },
     ],
   },
 };
@@ -104,9 +104,9 @@ export default function LoginPage() {
 
   const paramRole = searchParams.get("role")?.toLowerCase();
   const initialRole: UserRole =
-    paramRole === "patient" || paramRole === "support" || paramRole === "doctor"
+    paramRole === "patient" || paramRole === "doctor" || paramRole === "admin"
       ? paramRole
-      : "doctor";
+      : "patient";
 
   const sessionReason = searchParams.get("reason");
 
@@ -118,7 +118,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // 2FA State (Doctor & Support TS only)
+  // 2FA State (Doctor & Admin only)
   const [otpDigits, setOtpDigits] = useState<string[]>([
     "",
     "",
@@ -138,7 +138,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     const qRole = searchParams.get("role")?.toLowerCase();
-    if (qRole === "doctor" || qRole === "patient" || qRole === "support") {
+    if (qRole === "patient" || qRole === "doctor" || qRole === "admin") {
       setRole(qRole);
     }
   }, [searchParams]);
@@ -188,6 +188,13 @@ export default function LoginPage() {
     }
     if (password.trim().length < 6) {
       setError("Password must be at least 6 characters long.");
+      return;
+    }
+
+    if (email.toLowerCase().includes("deactivated")) {
+      setError(
+        "This account has been deactivated by an Administrator. Contact system governance to restore access.",
+      );
       return;
     }
 
@@ -388,7 +395,7 @@ export default function LoginPage() {
                 </div>
 
                 <div className="mt-6 grid grid-cols-3 gap-1.5 p-1.5 rounded-2xl bg-slate-100">
-                  {(["doctor", "patient", "support"] as UserRole[]).map((r) => {
+                  {(["patient", "doctor", "admin"] as UserRole[]).map((r) => {
                     const Icon = roleThemes[r].icon;
                     const active = role === r;
                     return (
@@ -503,8 +510,8 @@ export default function LoginPage() {
                 </form>
 
                 <p className="mt-6 text-center text-xs font-normal text-slate-500">
-                  {role === "support" ? (
-                    "Support accounts are provisioned by system administrators."
+                  {role === "admin" ? (
+                    "Administrator accounts are provisioned by system governance."
                   ) : (
                     <>
                       Don&apos;t have an account?{" "}
@@ -520,7 +527,7 @@ export default function LoginPage() {
               </>
             )}
 
-            {/* VIEW 2: 2FA VERIFICATION (DOCTOR & SUPPORT TS ONLY) */}
+            {/* VIEW 2: 2FA VERIFICATION (DOCTOR & ADMIN ONLY) */}
             {view === "2fa" && (
               <div>
                 <button
@@ -715,7 +722,7 @@ export default function LoginPage() {
                 </h2>
                 <p className="text-xs sm:text-sm font-normal text-slate-600 leading-relaxed">
                   Your clinician activation request for <strong>{email}</strong>{" "}
-                  is currently under review by Technical Support. You will be
+                  is currently under review by an Administrator. You will be
                   notified once your medical license is verified.
                 </p>
                 <div className="rounded-xl bg-[#eef4fb] p-3 text-xs font-normal text-[#052e6e] flex items-center justify-center gap-2">
