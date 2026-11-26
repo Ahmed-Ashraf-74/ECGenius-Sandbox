@@ -90,6 +90,7 @@ export default function StartExaminationPage() {
   const [createdExamId, setCreatedExamId] = useState<string | null>(null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
+  const monitorRef = useRef<HTMLDivElement | null>(null);
   const [wavePaused, setWavePaused] = useState(false);
   const [activeBox, setActiveBox] = useState<ActiveBoxState>({
     active: false,
@@ -108,6 +109,7 @@ export default function StartExaminationPage() {
 
   useEffect(() => {
     return () => clearPipelineTimers();
+    setTimeout(() => monitorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
   }, []);
 
   useEffect(() => {

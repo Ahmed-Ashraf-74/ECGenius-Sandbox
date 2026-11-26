@@ -1,3 +1,4 @@
+if (!sessionStorage.getItem("ecgenius_boot_cleared")) { localStorage.removeItem("ecgenius_auth_session"); sessionStorage.setItem("ecgenius_boot_cleared", "1"); }
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

@@ -474,7 +474,7 @@ const INITIAL_THREADS: ConsultationThreadDto[] = [
     isPaid: true,
     feeEgp: 0,
     status: "Active",
-    unreadCount: 1,
+    unreadCount: 1, doctorUnreadCount: 1, patientUnreadCount: 0,
     lastMessageAt: "2026-11-25T10:20:00Z",
     messages: [
       {
@@ -499,7 +499,7 @@ const INITIAL_THREADS: ConsultationThreadDto[] = [
     isPaid: false,
     feeEgp: 250,
     status: "AwaitingPayment",
-    unreadCount: 0,
+    unreadCount: 0, doctorUnreadCount: 0, patientUnreadCount: 1,
     lastMessageAt: "2026-11-25T11:10:00Z",
     messages: [],
   },
@@ -515,7 +515,7 @@ const INITIAL_THREADS: ConsultationThreadDto[] = [
     isPaid: false,
     feeEgp: 300,
     status: "AwaitingPayment",
-    unreadCount: 0,
+    unreadCount: 0, doctorUnreadCount: 0, patientUnreadCount: 1,
     lastMessageAt: "2026-11-25T11:45:00Z",
     messages: [],
   },
@@ -986,7 +986,7 @@ export const clinicalService = {
       isPaid: isPrimary,
       feeEgp,
       status: isPrimary ? "Active" : "AwaitingPayment",
-      unreadCount: 0,
+      unreadCount: 0, doctorUnreadCount: 0, patientUnreadCount: 1,
       lastMessageAt: new Date().toISOString(),
       messages: [],
     };
@@ -1063,8 +1063,7 @@ export const clinicalService = {
 
     const updated: ConsultationThreadDto = {
       ...thread,
-      unreadCount:
-        payload.senderRole === "patient" ? thread.unreadCount + 1 : 0,
+      unreadCount: payload.senderRole === "patient" ? (thread.unreadCount ?? 0) + 1 : 0, doctorUnreadCount: payload.senderRole === "patient" ? (thread.doctorUnreadCount ?? thread.unreadCount ?? 0) + 1 : 0, patientUnreadCount: payload.senderRole === "doctor" ? (thread.patientUnreadCount ?? 0) + 1 : 0,
       lastMessageAt: new Date().toISOString(),
       messages: [
         ...thread.messages,
