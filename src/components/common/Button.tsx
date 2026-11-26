@@ -13,31 +13,28 @@ export default function Button({
   children,
   ...props
 }: ButtonProps) {
-  const baseStyles =
-    "inline-flex items-center justify-center gap-2 font-semibold transition-all duration-300 ease-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]";
+  const base =
+    "inline-flex items-center justify-center gap-2 font-bold rounded-full transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
 
-  const variants = {
-    primary:
-      "bg-gradient-to-r from-[#052e6e] to-[#0284c7] text-white shadow-sm hover:from-[#031d47] hover:to-[#0369a1] hover:shadow-[0_10px_25px_-5px_rgba(2,132,199,0.45)]",
+  const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
+    primary: "btn-landing-gradient text-white",
     secondary:
-      "bg-[#eef4fb] text-[#052e6e] hover:bg-sky-100 hover:shadow-[0_8px_20px_-6px_rgba(5,46,110,0.2)]",
+      "bg-white text-[#052e6e] border border-slate-200 hover:bg-sky-50 shadow-2xs",
     outline:
-      "border border-slate-300 bg-white text-[#052e6e] hover:border-[#0284c7] hover:bg-sky-50/70 hover:text-[#0284c7] hover:shadow-[0_8px_20px_-6px_rgba(2,132,199,0.18)]",
-    ghost:
-      "bg-transparent text-slate-600 hover:bg-slate-100 hover:text-[#052e6e]",
-    danger:
-      "bg-[#e11d48] text-white hover:bg-rose-700 hover:shadow-[0_10px_25px_-5px_rgba(225,29,72,0.45)]",
+      "bg-transparent text-[#052e6e] border border-[#052e6e]/30 hover:border-[#0284c7] hover:text-[#0284c7]",
+    ghost: "bg-slate-100 text-slate-700 hover:bg-slate-200",
+    danger: "bg-[#e11d48] text-white hover:bg-rose-700",
   };
 
-  const sizes = {
-    sm: "text-xs px-4 py-2 rounded-xl",
-    md: "text-sm px-5 py-2.5 rounded-xl",
-    lg: "text-sm sm:text-base px-6 py-3 rounded-2xl",
+  const sizes: Record<NonNullable<ButtonProps["size"]>, string> = {
+    sm: "px-4 py-2 text-xs",
+    md: "px-5 py-2.5 text-xs sm:text-sm",
+    lg: "px-6 py-3 text-sm",
   };
 
   return (
     <button
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}
     >
       {children}
